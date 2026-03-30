@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock-Paper-Scissors Game</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+        background-color: rgb(24, 24, 24);
+        color: white;
+      }
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+      .emoji {
+        width: 70px;
+        height: 70px;
+      } 
+      .icon {
+        background: transparent;
+        padding: 30px 30px;
+        border: white solid 2px;
+        border-radius: 100px;
+        cursor: pointer;
+      }
+      .icon:hover {
+          background-color: rgb(81, 81, 81);
+          color: black;
+        }
+      #result {   
+          font-size: 24px;
+          margin-top: 20px;
+        }
+      #move {
+          font-size: 28px;
+          margin-top: 10px;
+        }
+      #score {
+          font-size: 20px;
+          margin-top: 20px;
+
+        }
+       
+    </style>
+  </head>
+  <body>
+    <h1>Rock Paper Scissors Game</h1>
+    <button onclick="play('rock')" class="icon"><img src="images/rock-emoji.png" class="emoji" /></button>
+    <button onclick="play('paper')" class="icon"><img src="images/paper-emoji.png" class="emoji"/></button>
+    <button onclick="play('scissors')" class="icon"><img src="images/scissors-emoji.png" class="emoji"/></button>
+    <p id="result"></p>
+    <p id="move"></p>
+    <p id="score"></p>
+     <button onclick="reset()">Reset Score</button>
+
+    <script>
+      const score = JSON.parse(localStorage.getItem('score')) || { player: 0, computer: 0, Ties: 0 };
+      document.getElementById('score').textContent = `Player: ${score.player} | Computer: ${score.computer} | Ties: ${score.Ties}`;
+      function play(playerChoice) {
+        const choices = ['rock', 'paper', 'scissors'];
+        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+        let result = '';
+        if (playerChoice === computerChoice) {
+          result = "It's a tie!";
+          score.Ties++;
+        } else if (
+          (playerChoice === 'rock' && computerChoice === 'scissors') ||
+          (playerChoice === 'paper' && computerChoice === 'rock') ||
+          (playerChoice === 'scissors' && computerChoice === 'paper')
+        ) {
+          result = "You win!";
+          score.player++;
+        } else {
+          result = "Computer wins!";
+          score.computer++;
+        }
+        document.getElementById('result').innerHTML = `Result: <strong>${result}</strong>`;
+        document.getElementById('move').innerHTML = `You <img src="images/${playerChoice}-emoji.png" class="emoji" /><img src="images/${computerChoice}-emoji.png" class="emoji" /> computer`;
+        document.getElementById('score').textContent = `Player: ${score.player} | Computer: ${score.computer} | Ties: ${score.Ties}`;
+        localStorage.setItem('score', JSON.stringify(score));
+      }
+      function reset() {
+        score.player = 0;
+        score.computer = 0;
+        score.Ties = 0;
+        document.getElementById('move').textContent = '';
+        document.getElementById('score').textContent = `Player: ${score.player} | Computer: ${score.computer} | Ties: ${score.Ties}`;
+        document.getElementById('result').textContent = '';
+        alert('Game reset! Scores are now zero.');   
+      }
+    </script>
+  </body>
+</html>
